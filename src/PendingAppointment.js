@@ -4,12 +4,14 @@ import axios from "axios";
 import { GetAllAppointments } from "./context/Context";
 function PendingAppointment(props) {
   const { num, setNum } = useContext(GetAllAppointments);
-  const approveAppointment = () => {
+  const updateAppointment = (e) => {
+    const status = e.target.id === "approve-button" ? "approved" : "cancelled";
     axios
       .put(
-        "https://shlomit-00e660508931.herokuapp.com/appointments/approve-appointment",
+        "https://shlomit-00e660508931.herokuapp.com/appointments/update-appointment",
         {
           id: props.appointment._id,
+          status: status,
         },
         {
           headers: { authorization: "bearer " + localStorage.token },
@@ -21,7 +23,6 @@ function PendingAppointment(props) {
       })
       .catch((err) => console.log(err));
   };
-
   return (
     <div className="appointment-box">
       <div>{props.appointment.patientName}</div>
@@ -35,8 +36,12 @@ function PendingAppointment(props) {
         {new Date(props.appointment.time).getMinutes()}0
       </div>
       <div className="appointment-buttons">
-        <button>ביטול</button>
-        <button onClick={approveAppointment}>אישור</button>
+        <button id="cancel-button" onClick={updateAppointment}>
+          ביטול
+        </button>
+        <button id="approve-button" onClick={updateAppointment}>
+          אישור
+        </button>
       </div>
     </div>
   );

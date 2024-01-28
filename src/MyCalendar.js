@@ -4,17 +4,23 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./MyCalendar.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
-const MyCalendar = () => {
+const MyCalendar = (props) => {
   const [appointments, setAppointments] = useState([]);
   useEffect(() => {
     axios
-      .get("https://shlomit-00e660508931.herokuapp.com/appointments/get-appointments-with-info", {
-        headers: { authorization: "bearer " + localStorage.token },
-      })
+      .get(
+        "https://shlomit-00e660508931.herokuapp.com/appointments/get-appointments-with-info",
+        {
+          headers: { authorization: "bearer " + localStorage.token },
+        }
+      )
       .then((res) => {
         console.log(res.data);
+        const approvedAppointments = res.data.filter((appointment) => {
+          return appointment.status === "approved";
+        });
         setAppointments(
-          res.data.map((appointment, i) => {
+          approvedAppointments.map((appointment, i) => {
             return {
               id: i,
               title: appointment.patientName,
@@ -27,7 +33,13 @@ const MyCalendar = () => {
             };
           })
         );
-      });
+        props.setPendingAppointments(
+          res.data.filter((appointment) => {
+            return appointment.status === "pending";
+          })
+        );
+      })
+      .catch((err) => console.log(err));
   }, []);
   useEffect(() => {
     console.log(appointments);

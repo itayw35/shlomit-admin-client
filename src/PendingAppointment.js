@@ -1,17 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./PendingAppointment.css";
 import axios from "axios";
+import { GetAllAppointments } from "./context/Context";
 function PendingAppointment(props) {
+  const { num, setNum } = useContext(GetAllAppointments);
   const approveAppointment = () => {
     axios
       .put(
         "https://shlomit-00e660508931.herokuapp.com/appointments/approve-appointment",
         {
           id: props.appointment._id,
+        },
+        {
+          headers: { authorization: "bearer " + localStorage.token },
         }
       )
       .then((res) => {
         console.log(res.data);
+        setNum(num + 1);
       })
       .catch((err) => console.log(err));
   };

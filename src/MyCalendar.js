@@ -3,9 +3,11 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./MyCalendar.css";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { GetAllAppointments } from "./context/Context";
 const MyCalendar = (props) => {
   const [appointments, setAppointments] = useState([]);
+  const { num } = useContext(GetAllAppointments);
   useEffect(() => {
     axios
       .get(
@@ -40,7 +42,7 @@ const MyCalendar = (props) => {
         );
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [num]);
   useEffect(() => {
     console.log(appointments);
   }, [appointments]);

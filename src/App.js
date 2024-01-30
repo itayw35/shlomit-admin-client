@@ -6,7 +6,7 @@ import PendingAppointments from "./PendingAppointments";
 import { GetAllAppointments } from "./context/Context";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.token);
   const [pendingAppointments, setPendingAppointments] = useState([]);
   const [num, setNum] = useState(0);
   return (

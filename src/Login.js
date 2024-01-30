@@ -22,7 +22,6 @@ function Login(props) {
       })
       .then((res) => {
         localStorage.token = res.data.token;
-        localStorage.userName = res.data.userName;
         props.setIsLoggedIn(true);
       })
       .catch((err) => {
